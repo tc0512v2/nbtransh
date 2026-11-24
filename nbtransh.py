@@ -516,11 +516,16 @@ def main():
     parser = argparse.ArgumentParser(description="nbtransh")
     parser.add_argument('--version', '-v', action='version', version=f"%(prog)s {__version__}")    
     parser.add_argument('--repl', action='store_true', help='Start REPL')
+    parser.add_argument('--show-config', action='store_true', help='Show nbtransh\'s configuration')
     parser.add_argument('-c', action='store_true', help='Translate a simple sentence in the command line')
     parser.add_argument('sentence', nargs='?', help='The sentence which you want to translate, along with `-c` argument')
     args = parser.parse_args()
     if args.repl:
         repl()
+        return
+    if args.show_config:
+        for k, v in CONFIG.items():
+            print(f"  {k}: {v}")
         return
     elif args.c:
         if not args.sentence:
@@ -528,6 +533,7 @@ def main():
         text, from_lang, to_lang = ParseStdin(args.sentence)
         result = TranslateWithDictionary(text, from_lang, to_lang)
         print(result)
+        return
     else:
         parser.print_help()
 
